@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.deployment.name }}
+  labels:
+    app: apache
+spec:
+  replicas: {{ .Values.deployment.replicaCount }}
+  selector:
+    matchLabels:
+      app: apache
+  template:
+    metadata:
+      labels:
+        app: apache
+    spec:
+      containers:
+        - name: apachecontainer
+          image: "{{ .Values.deployment.image.app }}:{{ .Values.deployment.image.version }}"
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+        # if proxy is enabled in Values file, create it here
+        {{- if eq .Values.proxy.enabled true -}}
+        {{- include "proxy" . | nindent 8 }}
+        {{- else if }}
+
+        {{- else }}
+
+        {{- end -}}
+        

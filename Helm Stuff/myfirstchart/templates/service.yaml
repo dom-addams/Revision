@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.service.name }}
+  # like the old TF attribute reference or string interpolation, HELM uses curly braces 
+  # and similar again it uses syntax like module references to tell it what to look for
+  # references Values file // Service within file // Name of service 
+  labels:
+    app: nginx
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      nodePort: {{ .Values.service.nodePort }}
+      targetPort: {{ .Values.service.targetPort }}
+      protocol: TCP
+      name: http
+  selector:
+    app: nginx

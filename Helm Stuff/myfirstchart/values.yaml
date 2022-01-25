@@ -1,0 +1,17 @@
+# Default values for myfirstcahrt.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+deployment:
+  name: helmdeployment
+  replicaCount: 1
+  image:
+    app: nginx
+    version: latest
+
+service:
+  name: helmservice
+  type: NodePort
+  port: 80
+  targetPort: 80
+  NodePort: 31234
