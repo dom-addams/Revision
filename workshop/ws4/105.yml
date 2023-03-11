@@ -1,0 +1,47 @@
+## Custom Storage Account ##
+
+#kubectl create secret generic <SECRET_NAME> --type=azurefile --from-literal=azurestorageaccountname=<STORAGE_ACCOUNT_NAME> --from-literal=azurestorageaccountkey=<ACCESS_KEY>
+
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: <STORAGE_CLASS_NAME>
+provisioner: kubernetes.io/azure-file # key line
+parameters:
+  storageAccount: <STORAGE_ACCOUNT_NAME>
+  skuName: Standard_LRS
+  secretName: <SECRET_NAME>
+  shareName: <SHARE_NAME>
+
+# Replace <STORAGE_CLASS_NAME> with a name of your choice
+# Replace <STORAGE_ACCOUNT_NAME> with the name of your custom storage account
+# Replace <SECRET_NAME> with the name of the secret you created 
+# Replace <SHARE_NAME> with the name of the share you want to create.
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: <PVC_NAME>
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: <STORAGE_CLASS_NAME>
+  resources:
+    requests:
+      storage: 1Gi
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: <POD_NAME>
+spec:
+  containers:
+    - name: <CONTAINER_NAME>
+      image: <IMAGE_NAME>
+      volumeMounts:
+        - mountPath: <MOUNT_PATH>
+          name: <PVC_NAME>
+  volumes:
+    - name: <PVC_NAME>
+      persistentVolumeClaim:
+        claimName: <PVC_NAME>

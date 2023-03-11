@@ -1,0 +1,56 @@
+#kubectl create secret generic <SECRET_NAME> --type=azure/blobfuse --from-literal=accountname=<ACCOUNT_NAME> --from-literal=accountkey=<ACCOUNT_KEY>
+  ## Replace <SECRET_NAME> with a name of your choice, <ACCOUNT_NAME> with the name of your Azure Blob Storage account, and <ACCOUNT_KEY> with the access key for your Azure Blob Storage account.
+
+# kubectl create configmap <CONFIGMAP_NAME> --from-literal=container-name=<CONTAINER_NAME> --from-literal=path-to-mount=<PATH_TO_MOUNT> --from-literal=file-system-type=blobfuse
+  ## Replace <PATH_TO_MOUNT> with the path where you want to mount the container in your AKS cluster
+
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: <STORAGE_CLASS_NAME>
+provisioner: kubernetes.io/azure-disk
+parameters:
+  storageaccounttype: Standard_LRS
+  skuname: Standard_LRS
+  kind: Managed
+  useManagedIdentity: "true"
+  blobfuseOpts: "--file-cache-timeout-in-seconds=120 --container-name=<CONTAINER_NAME> --log-level=LOG_DEBUG --tmp-path=/mnt/blobfusetmp --file-system-type=blobfuse"
+mountOptions:
+  - dir_mode=0777
+  - file_mode=0777
+  - uid=1000
+  - gid=1000
+  - allow_other
+  - kernel_cache
+
+# Replace <STORAGE_CLASS_NAME> with a name of your choice
+# Replace <CONTAINER_NAME> with the name of the Azure Blob Storage container you want to mount
+# djust the blobfuseOpts to include any additional options you need for your use case.
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: <PVC_NAME>
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: <STORAGE_CLASS_NAME>
+  resources:
+    requests:
+      storage: 1Gi
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: <POD_NAME>
+spec:
+  containers:
+    - name: <CONTAINER_NAME>
+      image: <IMAGE_NAME>
+      volumeMounts:
+        - mountPath: <MOUNT_PATH>
+          name: <PVC_NAME>
+  volumes:
+    - name: <PVC_NAME>
+      persistentVolumeClaim:
+        claimName: <PVC_NAME>
