@@ -1,0 +1,11 @@
+{
+    "name": "configmap-watcher",
+    "version": "1.0.0",
+    "description": "A React application that watches for changes to Kubernetes configmaps and updates pods with the latest configmap values.",
+    "main": "index.js",
+    "dependencies": {
+        "@kubernetes/client-node": "^0.18.1",
+        "react": "^18.0.0",
+        "react-dom": "^18.0.0"
+    }
+}
