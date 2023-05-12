@@ -14,9 +14,20 @@ spec:
       containers:
       - name: myapp
         image: nginx
-        resources:
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
+        # readinessProbe:
+        #   httpGet:
+        #     scheme: HTTPS
+        #     path: /healthz
+        #     port: 8443
+        #   initialDelaySeconds: 10
+        #   periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /actuator/healthz
+            port: 80
+        resources: {}
+          # limits:
+          #   memory: "128Mi"
+          #   cpu: "500m"
         ports:
         - containerPort: 80
