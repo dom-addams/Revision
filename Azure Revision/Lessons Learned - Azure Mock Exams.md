@@ -43,6 +43,8 @@ Key highlights of each area mesaured.
 
 * Azure locks prevent users from accidentally deleting or modifying resources
 
+* Read-only lock doesn't stop you moving resources to another resource group
+
 * You should give roles with more or less access to specific resources when access to other resources isn't required
 
 * A Virtual Machine requires a Virtual Network or the permissions to create one
@@ -84,7 +86,7 @@ Key highlights of each area mesaured.
 
 ### _Deploy and manage Azure compute resources_
 
-* **You cab move resources accross subscripotion using `Move-AzResource` PowerShell command**
+* **You can move resources accross subscripotion using `Move-AzResource` PowerShell command**
 
 * To add a NIC to a VM, the VM needs to be stopped first
 
@@ -114,6 +116,8 @@ Key highlights of each area mesaured.
 
 * To create an Azure Bastion Host, you need to create the AzureBastionSubnet in the Vnet
 
+* You should create availability set based on the number of tiers for your application i.e. Web + DB = 2
+
 
 
 
@@ -136,7 +140,7 @@ Key highlights of each area mesaured.
 
 * 1 NSG can link to many NICs
 
-* To set IP ranges in a Vnet, you first need an **Address space** which can be used for creating a Subnet
+* For new IP ranges in a Vnet, you first need an **Address space** which can be **used to create a Subnet**
 
 * To create resource with IP range, you need to create a Subnet from the Vnet address space with the specific start address (i.e. 10.2.1.0/24)
 
