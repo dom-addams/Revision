@@ -1,5 +1,5 @@
 {
-  "scriptFile": "../dist/server.js",
+  "scriptFile": "../dist/AzFunctionHelloWorld/index.js",
   "entryPoint": "helloWorld",
   "bindings": [
     {

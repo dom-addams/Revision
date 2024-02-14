@@ -1,5 +1,5 @@
 {
-  "scriptFile": "../dist/server.js",
+  "scriptFile": "../dist/AzFunctionHealthCheck/index.js",
   "entryPoint": "healthCheck",
   "bindings": [
     {
